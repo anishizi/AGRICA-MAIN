@@ -1,0 +1,223 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Styles additionnels */
+body {
+  @apply bg-gray-100 text-gray-900;
+  overflow-x: hidden; /* Empêcher le défilement horizontal lorsqu'un menu est ouvert */
+}
+
+.container {
+  @apply mx-auto px-2 pt-2; /* Ajuster le padding-top pour réduire la distance */
+}
+
+/* Styles du navbar principal */
+nav {
+  @apply fixed top-0 left-0 right-0 bg-white shadow-md z-50;
+  height: 56px; /* Hauteur du navbar principal */
+}
+
+nav .nav-container {
+  @apply flex justify-between items-center p-4;
+}
+
+nav .nav-items {
+  @apply flex space-x-4;
+}
+
+nav .icon {
+  @apply h-6 w-6 text-gray-700;
+}
+
+nav .logo-text {
+  @apply text-lg font-semibold text-gray-700;
+}
+
+main {
+  padding-top: 100px; /* Ajuster cette valeur pour correspondre à la hauteur combinée de vos navbar et sub-navbar */
+}
+
+/* Styles du sub-navbar */
+.sub-nav {
+  @apply fixed top-14 left-0 right-0 bg-gray-200 shadow-md z-30; /* Z-index réduit pour être derrière le menu */
+  height: 44px; /* Hauteur augmentée pour le sub-navbar */
+  display: flex;
+  align-items: center;
+  padding-left: 0.5rem; /* Ajouter du padding à gauche pour l'espacement */
+  padding-right: 0.5rem; /* Ajouter du padding à droite pour l'espacement */
+}
+
+/* Styles du contenu du sub-navbar */
+.sub-nav .sub-nav-content {
+  display: flex;
+  align-items: center;
+}
+
+.sub-nav .icon {
+  @apply h-5 w-5 text-black; /* Icône plus petite et fine */
+}
+
+.sub-nav .sub-nav-title {
+  @apply text-lg font-thin text-black; /* Texte plus fin pour le titre */
+  margin-left: 0.5rem; /* Marge entre l'icône et le texte */
+}
+
+/* Styles du menu */
+.menu {
+  background-color: #ffffff; /* Fond clair */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  padding: 2rem; /* Padding élargi */
+  border-radius: 1rem; /* Coins plus arrondis */
+  width: 100%; /* Pleine largeur */
+  max-width: 700px; /* Limiter la largeur maximale */
+  margin: 0 auto; /* Centrer horizontalement */
+  animation: fadeIn 0.3s ease-in-out;
+  z-index: 50; /* S'assurer que le menu est au-dessus de tous les autres éléments */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.menu-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0.5rem; /* Padding réduit */
+  margin-top: calc(0.5rem + 56px); /* Ajuster la marge supérieure pour tenir compte de la hauteur du navbar */
+  width: 100%;
+  max-width: calc(100% - 1rem); /* Padding latéral réduit */
+  overflow-y: auto; /* Rendre le contenu défilable */
+  max-height: calc(100vh - 56px); /* Limiter la hauteur à la taille de l'écran */
+  z-index: 50; /* Assurer que le wrapper est au-dessus de tous les autres éléments */
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem; /* Espace réduit */
+  margin-bottom: 1rem; /* Espace entre les grilles */
+}
+
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon-container {
+  background-color: #f1f1f1; /* Gris légèrement plus foncé pour le contraste */
+  padding: 1.5rem; /* Padding élargi */
+  border-radius: 9999px; /* Tailwind's rounded-full */
+  transition: transform 0.3s;
+}
+
+.icon-container:hover {
+  transform: translateY(-5px); /* Effet de levée au survol */
+}
+
+.menu-item span {
+  font-size: 0.875rem; /* Tailwind's text-sm */
+  color: #555555; /* Gris plus foncé pour le texte */
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100px; /* Ajuster si nécessaire pour que le texte tienne */
+}
+
+.icon {
+  @apply h-6 w-6 text-gray-700;
+}
+
+.icon:hover {
+  color: #555555; /* Nuance plus foncée au survol */
+}
+
+.separator {
+  width: 100%;
+  border-top: 1px solid #eaeaea;
+  margin: 1rem 0;
+}
+
+.greeting {
+  font-size: 1rem; /* Tailwind's text-base */
+  color: #555555; /* Gris plus foncé pour le texte */
+  font-weight: 500; /* Tailwind's font-medium */
+  margin-bottom: 1rem;
+}
+
+/* Styles globaux pour les conteneurs */
+.container-div {
+  @apply bg-white shadow-md rounded-lg p-4 mt-1; /* Supprimer toute marge au-dessus du conteneur */
+  border: 1px solid #555555; /* Tailwind's border-gray-200 */
+  background-color: #f0f0f5; /* Fond gris clair inspiré de macOS */
+}
+
+.container-title {
+  @apply text-white p-2 rounded-t-lg -m-4 mb-4;
+  background-color: #555555; /* Fond bleu inspiré de macOS */
+  border-bottom: 1px solid #555555; /* Tailwind's border-gray-200 */
+}
+
+/* Ajustements réactifs pour les écrans plus petits */
+@screen sm {
+  .menu {
+    padding: 1rem; /* Padding réduit */
+  }
+
+  .menu-wrapper {
+    margin-top: calc(0.5rem + 56px); /* Ajuster la marge supérieure pour tenir compte de la hauteur du navbar */
+    padding: 0.25rem; /* Padding réduit */
+    max-height: calc(100vh - 56px); /* Limiter la hauteur à la taille de l'écran */
+  }
+
+  .menu-grid {
+    gap: 0.5rem; /* Espace réduit */
+  }
+
+  .icon-container {
+    padding: 1rem; /* Padding réduit */
+  }
+
+  .menu-item span {
+    font-size: 0.75rem; /* Tailwind's text-xs */
+    max-width: 80px; /* Ajuster si nécessaire pour que le texte tienne */
+  }
+}
+
+@media (max-width: 480px) {
+  .menu {
+    padding: 0.5rem; /* Padding encore réduit */
+  }
+
+  .menu-wrapper {
+    margin-top: calc(0.25rem + 56px); /* Ajuster la marge supérieure pour tenir compte de la hauteur du navbar */
+    padding: 0.125rem; /* Padding encore réduit */
+    max-height: calc(100vh - 56px); /* Limiter la hauteur à la taille de l'écran */
+  }
+
+  .menu-grid {
+    gap: 0.25rem; /* Espace encore réduit */
+  }
+
+  .icon-container {
+    padding: 0.75rem; /* Padding encore réduit */
+  }
+
+  .menu-item span {
+    font-size: 0.625rem; /* Tailwind's text-2xs */
+    max-width: 60px; /* Ajuster si nécessaire pour que le texte tienne */
+  }
+
+  .icon {
+    @apply h-4 w-4 text-gray-700; /* Icônes plus petites */
+  }
+}
