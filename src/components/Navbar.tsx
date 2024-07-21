@@ -19,6 +19,7 @@ import {
 } from 'react-icons/fi';
 import Link from 'next/link'; // Importing Next.js Link component
 import { useRouter } from 'next/router';
+import { signOut, useSession } from 'next-auth/react';
 
 const icons = [
   { icon: FiHome, name: 'Accueil', link: '/' },
@@ -39,6 +40,7 @@ const icons = [
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
+  const { data: session } = useSession();
 
   const openMenu = () => {
     setMenuOpen(true);
@@ -100,7 +102,7 @@ const Navbar: React.FC = () => {
           <div className="menu-wrapper mt-4 mx-2">
             <div className="menu rounded-lg">
               <div className="menu-item greeting">
-                Bonjour: utilisateur
+                Bonjour: {session?.user?.name} {session?.user?.surname}
               </div>
               <hr className="separator" />
               <div className="menu-grid">
@@ -161,14 +163,12 @@ const Navbar: React.FC = () => {
                     <span>{'Météo'}</span>
                   </div>
                 </Link>
-                <Link href="/logout">
-                  <div className="menu-item cursor-pointer" onClick={closeMenu}>
-                    <div className="icon-container">
-                      <FiLogOut className="h-6 w-6 text-gray-700" />
-                    </div>
-                    <span>Déconnexion</span>
+                <div className="menu-item cursor-pointer" onClick={() => signOut()}>
+                  <div className="icon-container">
+                    <FiLogOut className="h-6 w-6 text-gray-700" />
                   </div>
-                </Link>
+                  <span>Déconnexion</span>
+                </div>
               </div>
             </div>
           </div>
