@@ -1,11 +1,12 @@
 import NextAuth from 'next-auth';
+import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -15,50 +16,48 @@ export default NextAuth({
       },
       authorize: async (credentials) => {
         if (!credentials?.username || !credentials?.password) {
-          console.log('Identifiants manquants');
-          return null;
+          throw new Error('Missing credentials');
         }
-        
-        try {
-          const user = await prisma.utilisateur.findUnique({
-            where: { username: credentials.username },
-          });
 
-          if (!user) {
-            console.log('Utilisateur non trouvé');
-            return null;
-          }
+        const user = await prisma.utilisateur.findUnique({
+          where: { username: credentials.username },
+          include: { permissions: true }, // Include permissions
+        });
 
-          const passwordValid = bcrypt.compareSync(credentials.password, user.password);
-          
-          if (passwordValid) {
-            console.log('Utilisateur authentifié:', user);
-            return {
-              id: user.id,
-              name: `${user.nom} ${user.prenom}`,
-              email: user.username,
-              role: user.role,
-            };
-          } else {
-            console.log('Mot de passe invalide');
-            return null;
-          }
-        } catch (error) {
-          console.error('Erreur lors de la recherche de l\'utilisateur:', error);
-          return null;
+        if (!user) {
+          throw new Error('Nom d\'utilisateur incorrect');
         }
+
+        const passwordValid = bcrypt.compareSync(credentials.password, user.password);
+
+        if (!passwordValid) {
+          throw new Error('Mot de passe incorrect');
+        }
+
+        const permissions = user.role === 'ADMIN' 
+          ? ['/', '/GestionUtilisateur', '/Comptabilite', '/GestionPaie', '/Plantations', '/Irrigation', '/Automat', '/Message', '/Notification', '/NiveauBassin', '/TacheAFaire', '/Surveillance', '/Meteo']
+          : user.permissions.map((p) => p.page);
+
+        return {
+          id: user.id,
+          name: `${user.nom} ${user.prenom}`,
+          email: user.username,
+          role: user.role,
+          permissions,
+        };
       },
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   session: {
-    jwt: true,
+    strategy: 'jwt',
   },
   callbacks: {
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id;
         session.user.role = token.role;
+        session.user.permissions = token.permissions;
       }
       return session;
     },
@@ -66,8 +65,11 @@ export default NextAuth({
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.permissions = user.permissions;
       }
       return token;
     },
   },
-});
+};
+
+export default NextAuth(authOptions);

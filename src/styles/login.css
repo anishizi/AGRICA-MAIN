@@ -1,0 +1,49 @@
+/* login.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.login-container {
+  @apply min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-indigo-600;
+}
+
+.login-box {
+  @apply relative z-10 max-w-md w-full space-y-8 p-10 bg-white shadow-lg mx-4 sm:mx-auto rounded-t-full rounded-b-lg;
+}
+
+.login-header {
+  @apply text-center;
+}
+
+.login-header img {
+  @apply mx-auto h-32 w-32; /* Doubling the original size */
+}
+
+.login-header h2 {
+  @apply mt-6 text-2xl font-extrabold text-gray-900;
+}
+
+.form-container {
+  @apply mt-8 space-y-6;
+}
+
+.input-container {
+  @apply rounded-md shadow-sm;
+}
+
+.input-field {
+  @apply appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm;
+}
+
+.submit-button {
+  @apply relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+}
+
+/* Reset global styles that may affect the login page */
+body.login-page {
+  @apply bg-transparent;
+}
+
+main.login-page-main {
+  padding-top: 0 !important;
+}

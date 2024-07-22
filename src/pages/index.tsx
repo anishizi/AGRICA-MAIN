@@ -1,11 +1,10 @@
-// pages/index.tsx
-
 import React from 'react';
+import ProtectedRoute from '../components/ProtectedRoute';
 import SubNavAccueil from '../components/SubNavAccueil';
 
 const Home: React.FC = () => {
   return (
-    <>
+    <ProtectedRoute requiredPermissions={['/']}>
       <SubNavAccueil />
       <div className="container mx-auto p-4">
         <div className="container-div">
@@ -15,7 +14,7 @@ const Home: React.FC = () => {
           </p>
         </div>
       </div>
-    </>
+    </ProtectedRoute>
   );
 };
 

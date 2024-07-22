@@ -17,24 +17,24 @@ import {
   FiLogOut,
   FiCloud
 } from 'react-icons/fi';
-import Link from 'next/link'; // Importing Next.js Link component
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
 
 const icons = [
-  { icon: FiHome, name: 'Accueil', link: '/' },
-  { icon: FiUsers, name: 'Gestion Utilisateur', link: '/GestionUtilisateur' },
-  { icon: FiFileText, name: 'Comptabilité', link: '/Comptabilite' },
-  { icon: FiClipboard, name: 'Gestion Paie', link: '/GestionPaie' },
-  { icon: FiHeart, name: 'Plantations', link: '/Plantations' },
-  { icon: FiDroplet, name: 'Irrigation', link: '/Irrigation' },
-  { icon: FiGitPullRequest, name: 'Automat', link: '/Automat' },
-  { icon: FiMessageCircle, name: 'Message', link: '/Message' },
-  { icon: FiBell, name: 'Notification', link: '/Notification' },
-  { icon: FiLayers, name: 'Niveau Bassin', link: '/NiveauBassin' },
-  { icon: FiCalendar, name: 'Tâche à Faire', link: '/TacheAFaire' },
-  { icon: FiVideo, name: 'Surveillance', link: '/Surveillance' },
-  { icon: FiCloud, name: 'Météo', link: '/Meteo' }
+  { icon: FiHome, name: 'Accueil', link: '/', permission: '/' },
+  { icon: FiUsers, name: 'Gestion Utilisateur', link: '/GestionUtilisateur', permission: '/GestionUtilisateur' },
+  { icon: FiFileText, name: 'Comptabilité', link: '/Comptabilite', permission: '/Comptabilite' },
+  { icon: FiClipboard, name: 'Gestion Paie', link: '/GestionPaie', permission: '/GestionPaie' },
+  { icon: FiHeart, name: 'Plantations', link: '/Plantations', permission: '/Plantations' },
+  { icon: FiDroplet, name: 'Irrigation', link: '/Irrigation', permission: '/Irrigation' },
+  { icon: FiGitPullRequest, name: 'Automat', link: '/Automat', permission: '/Automat' },
+  { icon: FiMessageCircle, name: 'Message', link: '/Message', permission: '/Message' },
+  { icon: FiBell, name: 'Notification', link: '/Notification', permission: '/Notification' },
+  { icon: FiLayers, name: 'Niveau Bassin', link: '/NiveauBassin', permission: '/NiveauBassin' },
+  { icon: FiCalendar, name: 'Tâche à Faire', link: '/TacheAFaire', permission: '/TacheAFaire' },
+  { icon: FiVideo, name: 'Surveillance', link: '/Surveillance', permission: '/Surveillance' },
+  { icon: FiCloud, name: 'Météo', link: '/Meteo', permission: '/Meteo' }
 ];
 
 const Navbar: React.FC = () => {
@@ -80,21 +80,26 @@ const Navbar: React.FC = () => {
     };
   }, [router.events]);
 
+  const handleSignOut = async () => {
+    await signOut({ redirect: false });
+    router.push('/login');
+  };
+
+  const userPermissions = session?.user?.permissions || [];
+
   return (
     <>
-      <nav>
-        <div className="nav-container container">
-          <div className="flex items-center space-x-4">
-            <span className="logo-text">MonApp</span>
-          </div>
-          <div className="flex items-center space-x-4">
-            {!menuOpen && (
-              <FiMenu className="icon cursor-pointer" onClick={openMenu} />
-            )}
-            {menuOpen && (
-              <FiX className="icon cursor-pointer" onClick={closeMenu} />
-            )}
-          </div>
+      <nav className="bg-white shadow-md h-14 fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4">
+        <div className="flex items-center">
+          <img src="/logo.svg" alt="Logo" className="h-8 w-auto" /> {/* Adjust height to fit navbar */}
+        </div>
+        <div className="flex items-center">
+          {!menuOpen && (
+            <FiMenu className="icon cursor-pointer h-6 w-6" onClick={openMenu} />
+          )}
+          {menuOpen && (
+            <FiX className="icon cursor-pointer h-6 w-6" onClick={closeMenu} />
+          )}
         </div>
       </nav>
       {menuOpen && (
@@ -106,7 +111,7 @@ const Navbar: React.FC = () => {
               </div>
               <hr className="separator" />
               <div className="menu-grid">
-                {icons.slice(0, 3).map(({ icon: Icon, name, link }, i) => (
+                {icons.filter(icon => session?.user?.role === 'ADMIN' || userPermissions.includes(icon.permission)).slice(0, 3).map(({ icon: Icon, name, link }, i) => (
                   <Link href={link} key={i}>
                     <div className="menu-item cursor-pointer" onClick={closeMenu}>
                       <div className="icon-container">
@@ -118,7 +123,7 @@ const Navbar: React.FC = () => {
                 ))}
               </div>
               <div className="menu-grid">
-                {icons.slice(3, 6).map(({ icon: Icon, name, link }, i) => (
+                {icons.filter(icon => session?.user?.role === 'ADMIN' || userPermissions.includes(icon.permission)).slice(3, 6).map(({ icon: Icon, name, link }, i) => (
                   <Link href={link} key={i}>
                     <div className="menu-item cursor-pointer" onClick={closeMenu}>
                       <div className="icon-container">
@@ -130,7 +135,7 @@ const Navbar: React.FC = () => {
                 ))}
               </div>
               <div className="menu-grid">
-                {icons.slice(6, 9).map(({ icon: Icon, name, link }, i) => (
+                {icons.filter(icon => session?.user?.role === 'ADMIN' || userPermissions.includes(icon.permission)).slice(6, 9).map(({ icon: Icon, name, link }, i) => (
                   <Link href={link} key={i}>
                     <div className="menu-item cursor-pointer" onClick={closeMenu}>
                       <div className="icon-container">
@@ -142,7 +147,7 @@ const Navbar: React.FC = () => {
                 ))}
               </div>
               <div className="menu-grid">
-                {icons.slice(9, 12).map(({ icon: Icon, name, link }, i) => (
+                {icons.filter(icon => session?.user?.role === 'ADMIN' || userPermissions.includes(icon.permission)).slice(9, 12).map(({ icon: Icon, name, link }, i) => (
                   <Link href={link} key={i}>
                     <div className="menu-item cursor-pointer" onClick={closeMenu}>
                       <div className="icon-container">
@@ -155,15 +160,17 @@ const Navbar: React.FC = () => {
               </div>
               <hr className="separator" />
               <div className="menu-grid">
-                <Link href="/Meteo">
-                  <div className="menu-item cursor-pointer" onClick={closeMenu}>
-                    <div className="icon-container">
-                      <FiCloud className="h-6 w-6 text-gray-700" />
+                {session?.user?.role === 'ADMIN' && (
+                  <Link href="/Meteo">
+                    <div className="menu-item cursor-pointer" onClick={closeMenu}>
+                      <div className="icon-container">
+                        <FiCloud className="h-6 w-6 text-gray-700" />
+                      </div>
+                      <span>{'Météo'}</span>
                     </div>
-                    <span>{'Météo'}</span>
-                  </div>
-                </Link>
-                <div className="menu-item cursor-pointer" onClick={() => signOut()}>
+                  </Link>
+                )}
+                <div className="menu-item cursor-pointer" onClick={handleSignOut}>
                   <div className="icon-container">
                     <FiLogOut className="h-6 w-6 text-gray-700" />
                   </div>

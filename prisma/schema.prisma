@@ -15,6 +15,8 @@ model Utilisateur {
   password   String
   role       Role
   permissions Permission[]
+  messagesSent     Message[] @relation("MessagesSent")
+  messagesReceived Message[] @relation("MessagesReceived")
   createdAt  DateTime    @default(now())
 }
 
@@ -23,6 +25,18 @@ model Permission {
   page          String
   utilisateurId Int
   utilisateur   Utilisateur  @relation(fields: [utilisateurId], references: [id])
+}
+
+model Message {
+  id            Int         @id @default(autoincrement())
+  senderId      Int
+  sender        Utilisateur @relation("MessagesSent", fields: [senderId], references: [id])
+  recipientId   Int
+  recipient     Utilisateur @relation("MessagesReceived", fields: [recipientId], references: [id])
+  subject       String
+  content       String
+  read          Boolean     @default(false)
+  createdAt     DateTime    @default(now())
 }
 
 enum Role {
